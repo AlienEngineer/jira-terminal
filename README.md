@@ -1,6 +1,10 @@
+## Disclamer
+
+This is a fork to extend the work made by [Jira Terminal](https://github.com/amritghimire/jira-terminal). The goal of this fork is to great dedicated work flow automations with enhanced TUI.
+
 ## Jira Terminal
 
-This application can be used for personal usage to manage jira from terminal.
+This application can be used for personal usage to manage jira from terminal. 
 
 ## Installation
 
@@ -8,11 +12,11 @@ This application can be used in multiple platform.
 
 ### MacOS
 
-This package is available in brew as `jira-terminal`. You can install it with following command:
+This package is available in brew as `jira`. You can install it with following command:
 
 ```
-brew tap amritghimire/jira-terminal 
-brew install jira-terminal
+brew tap alienengineer/jira 
+brew install jira
 ```
 
 ### Arch Linux
