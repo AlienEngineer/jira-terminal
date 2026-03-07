@@ -41,7 +41,7 @@ fn status_sort_key(status: &str) -> u8 {
 }
 
 /// Sort a PBI slice in ascending workflow order (new → resolved).
-pub fn sort_by_status(pbis: &mut Vec<Pbi>) {
+pub fn sort_by_status(pbis: &mut [Pbi]) {
     pbis.sort_by_key(|p| status_sort_key(&p.status));
 }
 
