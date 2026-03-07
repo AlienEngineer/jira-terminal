@@ -175,3 +175,18 @@ pub fn put(api_request: request::ApiRequest) -> Result<String, Box<dyn Error>> {
         .send_string(&json::stringify(api_request.json));
     handle_response_error("PUT", &url, response)
 }
+
+/// Call GET API request to JIRA Agile (Software) API.
+///
+/// # Arguments
+/// * api_request - API request structure. `url` is relative to `/rest/agile/1.0/`.
+pub fn get_agile(api_request: request::ApiRequest) -> Result<json::JsonValue, Box<dyn Error>> {
+    let url = format!(
+        "https://{}/rest/agile/1.0/{}",
+        normalize_namespace(&api_request.namespace),
+        api_request.url
+    );
+    let authentication = build_auth_header(&api_request);
+    let response = ureq::get(&url).set("Authorization", &authentication).call();
+    handle_response_error_json(&url, response)
+}

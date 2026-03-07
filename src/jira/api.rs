@@ -89,3 +89,13 @@ pub fn get_call_v3(endpoint: String) -> Result<json::JsonValue, Box<dyn Error>> 
             .unwrap_or(3),
     )
 }
+
+/// Call the Agile GET API (rest/agile/1.0/) with the provided endpoint.
+///
+/// # Arguments
+///
+/// * endpoint - Endpoint relative to `/rest/agile/1.0/`. Example: `board/42/sprint?state=active`
+pub fn get_agile_call(endpoint: String) -> Result<json::JsonValue, Box<dyn Error>> {
+    let api_request = get_api_request(endpoint, json::object! {}, 1);
+    api::get_agile(api_request)
+}

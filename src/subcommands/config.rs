@@ -43,6 +43,11 @@ pub fn handle(matches: &clap::ArgMatches) {
                 std::process::exit(1);
             }
         },
+        "board-id" => {
+            crate::config::update_config("board_id".to_string(), value.to_string());
+            println!("Board id updated to {value}");
+            println!("Now you can list your current sprint using --sprint flag!");
+        }
         _ => {
             eprintln!("Unknown config key '{key}'.");
             std::process::exit(1);

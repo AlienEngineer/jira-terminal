@@ -6,6 +6,7 @@ mod fields;
 pub mod lists;
 mod logout;
 mod new_issue;
+pub mod sprint;
 pub mod transitions;
 mod update;
 pub mod utils;
@@ -70,4 +71,48 @@ pub fn handle_comments_matches(matches: &ArgMatches) {
         return;
     }
     comments::add_new_comment(ticket, matches);
+}
+
+pub fn handle_sprint(_matches: &ArgMatches) {
+    use crate::config;
+    use crate::ui::sprint_list::SprintApp;
+
+    let board_id = config::get_config("board_id".to_string());
+    if board_id.is_empty() {
+        eprintln!(
+            "No board_id found in configuration.\n\
+             Please set it first with:\n\
+             \n\
+             jira-terminal config set board_id <YOUR_BOARD_ID>"
+        );
+        std::process::exit(1);
+    }
+
+    // Try the on-disk cache first; fall back to a fresh API fetch
+    let (sprint_name, sprint_goal, pbis) =
+        if let Some(cached) = sprint::load_sprint_cache(&board_id) {
+            println!("Loaded sprint from cache. Press L to refresh all items.");
+            cached
+        } else {
+            println!("Fetching active sprint for board {board_id}...");
+            match sprint::fetch_active_sprint_issues(&board_id) {
+                Err(e) => {
+                    eprintln!("Error fetching sprint: {e}");
+                    std::process::exit(1);
+                }
+                Ok(data) => {
+                    sprint::save_sprint_cache(&board_id, &data.0, &data.1, &data.2);
+                    data
+                }
+            }
+        };
+
+    let mut terminal = ratatui::init();
+    let result =
+        SprintApp::new(sprint_name, sprint_goal, board_id, pbis).run(&mut terminal);
+    ratatui::restore();
+    if let Err(e) = result {
+        eprintln!("TUI error: {e}");
+        std::process::exit(1);
+    }
 }
