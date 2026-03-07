@@ -34,6 +34,7 @@ pub mod config;
 pub mod jira;
 pub mod prelude;
 pub mod subcommands;
+pub mod ui;
 
 fn main() -> prelude::Result<()> {
     config::ensure_config()?;
@@ -51,7 +52,9 @@ fn main() -> prelude::Result<()> {
         .subcommand(subcommands::update::subcommand())
         .subcommand(subcommands::autocompletion::subcommand())
         .subcommand(subcommands::new_subcommand::subcommand())
-        .subcommand(subcommands::logout::subcommand());
+        .subcommand(subcommands::logout::subcommand())
+        .subcommand(subcommands::config::subcommand())
+        .subcommand(subcommands::sprint::subcommand());
     subcommands::handle_matches(app);
     Ok(())
 }
