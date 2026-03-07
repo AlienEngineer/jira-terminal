@@ -38,12 +38,7 @@ pub struct SprintApp {
 }
 
 impl SprintApp {
-    pub fn new(
-        sprint_name: String,
-        sprint_goal: String,
-        board_id: String,
-        pbis: Vec<Pbi>,
-    ) -> Self {
+    pub fn new(sprint_name: String, sprint_goal: String, board_id: String, pbis: Vec<Pbi>) -> Self {
         let mut table_state = TableState::default();
         if !pbis.is_empty() {
             table_state.select(Some(0));
@@ -155,8 +150,7 @@ impl SprintApp {
                         if idx < self.pbis.len() {
                             self.pbis[idx] = pbi;
                         }
-                        self.status_msg =
-                            format!("Loaded {}/{total}", idx + 1);
+                        self.status_msg = format!("Loaded {}/{total}", idx + 1);
                     }
                     Ok(LoadMsg::ItemError(idx, e)) => {
                         let key = self

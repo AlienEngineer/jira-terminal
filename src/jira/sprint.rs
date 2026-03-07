@@ -45,8 +45,6 @@ pub fn sort_by_status(pbis: &mut Vec<Pbi>) {
     pbis.sort_by_key(|p| status_sort_key(&p.status));
 }
 
-
-
 fn cache_path(board_id: &str) -> PathBuf {
     let config_file = config::get_config_file_name();
     let config_dir = PathBuf::from(&config_file)
@@ -147,8 +145,7 @@ pub fn fetch_active_sprint_issues(
     board_id: &str,
 ) -> Result<(String, String, Vec<Pbi>), Box<dyn Error>> {
     // 1. Find the active sprint for the board
-    let sprints_response =
-        api::get_agile_call(format!("board/{board_id}/sprint?state=active"))?;
+    let sprints_response = api::get_agile_call(format!("board/{board_id}/sprint?state=active"))?;
     let sprints = &sprints_response["values"];
     if !sprints.is_array() || sprints.is_empty() {
         return Err("No active sprint found for the given board.".into());
@@ -162,8 +159,7 @@ pub fn fetch_active_sprint_issues(
     let sprint_goal = sprint["goal"].as_str().unwrap_or("").to_string();
 
     // 2. Fetch all issues for that sprint (up to 500)
-    let issues_response =
-        api::get_agile_call(format!("sprint/{sprint_id}/issue?maxResults=500"))?;
+    let issues_response = api::get_agile_call(format!("sprint/{sprint_id}/issue?maxResults=500"))?;
     let issues = &issues_response["issues"];
 
     let mut pbis = Vec::new();
